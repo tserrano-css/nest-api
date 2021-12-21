@@ -1,23 +1,6 @@
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
+import { CreatePlayerDto } from './create-player.dto';
 
-export class UpdatePlayerDto {
-  @IsOptional()
-  @IsString()
-  playerName?: string;
-
-  @IsOptional()
-  @IsString()
-  pesMasterId?: string;
-
-  @IsOptional()
-  @IsString()
-  pesMasterName?: string;
-
-  @IsOptional()
-  @IsString()
-  tranfermarktURL?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  missing?: boolean;
-}
+export class UpdatePlayerDto extends PartialType(
+  OmitType(CreatePlayerDto, ['playerId'] as const),
+) {}

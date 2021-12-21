@@ -10,11 +10,13 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { Player } from './entities/player.entity';
 import { PlayersService } from './players.service';
 
+@ApiTags('players')
 @Controller('players')
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
