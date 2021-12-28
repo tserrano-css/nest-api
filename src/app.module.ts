@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PlayersModule } from './players/players.module';
+import { SeasonsModule } from './seasons/seasons.module';
+import { TournamentsModule } from './tournaments/tournaments.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { PlayersModule } from './players/players.module';
       synchronize: true,
     }),
     PlayersModule,
+    SeasonsModule,
+    TournamentsModule,
   ],
   controllers: [],
   providers: [],
