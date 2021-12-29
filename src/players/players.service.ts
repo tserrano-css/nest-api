@@ -38,7 +38,7 @@ const mock: Player[] = [
 export class PlayersService {
   constructor(
     @InjectRepository(Player)
-    private readonly playersRepository: Repository<Player>
+    private readonly playersRepository: Repository<Player>,
   ) {}
 
   getManyPlayers(): Promise<Player[]> {
