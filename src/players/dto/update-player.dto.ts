@@ -1,6 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/swagger';
+import { PartialType } from '@nestjs/swagger';
 import { CreatePlayerDto } from './create-player.dto';
 
-export class UpdatePlayerDto extends PartialType(
-  OmitType(CreatePlayerDto, ['playerId'] as const),
-) {}
+export class UpdatePlayerDto extends PartialType(CreatePlayerDto) {}

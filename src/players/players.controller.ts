@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -29,15 +30,20 @@ export class PlayersController {
 
   @Get(':playerId')
   @HttpCode(HttpStatus.OK)
-  getOnePlayer(
+  async cgetOnePlayer(
     @Param('playerId', ParseIntPipe) playerId: number,
   ): Promise<Player> {
-    return this.playersService.getOnePlayer(playerId);
+    const player = await this.playersService.getOnePlayer(playerId);
+
+    if (!player) {
+      throw new NotFoundException(`Player con id ${playerId} no existe`);
+    }
+    return player;
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createOnePlayer(@Body() playerDto: CreatePlayerDto): Player {
+  createOnePlayer(@Body() playerDto: CreatePlayerDto): Promise<Player> {
     return this.playersService.createOnePlayer(playerDto);
   }
 
@@ -46,7 +52,7 @@ export class PlayersController {
   partialUpdateOnePlayer(
     @Param('playerId', ParseIntPipe) playerId: number,
     @Body() updatePlayerDto: UpdatePlayerDto,
-  ): Player {
+  ): Promise<Player> {
     return this.playersService.partialUpdateOnePlayer(
       playerId,
       updatePlayerDto,

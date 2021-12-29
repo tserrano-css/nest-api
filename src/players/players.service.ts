@@ -1,38 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { Player } from './entities/player.entity';
-
-const mock: Player[] = [
-  {
-    playerId: 1,
-    playerName: 'S. SIRIGU',
-    pesMasterId: '32764',
-    pesMasterName: 's-sirigu',
-    transfermarktURL: null,
-    missing: false,
-  },
-  {
-    playerId: 2,
-    playerName: 'Y. SOMMER',
-    pesMasterId: '36627',
-    pesMasterName: 'y-sommer',
-    transfermarktURL:
-      'https://www.transfermarkt.es/yann-sommer/profil/spieler/42205',
-    missing: false,
-  },
-  {
-    playerId: 3,
-    playerName: 'N. OTAMENDI',
-    pesMasterId: '40725',
-    pesMasterName: 'n-otamendi',
-    transfermarktURL:
-      'https://www.transfermarkt.es/nicolas-otamendi/profil/spieler/54781',
-    missing: false,
-  },
-];
 
 @Injectable()
 export class PlayersService {
@@ -49,20 +24,47 @@ export class PlayersService {
     return this.playersRepository.findOne(playerId);
   }
 
-  createOnePlayer(playerDto: CreatePlayerDto): Player {
-    const a = mock[0];
-    return { ...a, ...playerDto };
+  async createOnePlayer(playerDto: CreatePlayerDto): Promise<Player> {
+    const countExist = await this.playersRepository.count({
+      where: {
+        key: playerDto.pesMasterId,
+      },
+    });
+
+    if (countExist > 0) {
+      throw new ConflictException(
+        `La PesmasterId ${playerDto.pesMasterId} ya existe`,
+      );
+    }
+
+    const tempEntity = await this.playersRepository.create(playerDto);
+    return this.playersRepository.save(tempEntity);
   }
 
-  partialUpdateOnePlayer(
+  async partialUpdateOnePlayer(
     playerId: number,
     updatePlayerDto: UpdatePlayerDto,
-  ): Player {
-    const res = mock.find((player) => (player.playerId = playerId));
-    return { ...res, ...updatePlayerDto };
+  ): Promise<Player> {
+    const preloadData = {
+      id: playerId,
+      ...updatePlayerDto,
+    };
+    const preloadProject = await this.playersRepository.preload(preloadData);
+
+    if (!preloadProject) {
+      throw new NotFoundException('El player no existe');
+    }
+
+    return this.playersRepository.save(preloadProject);
   }
 
-  deleateOnePlayer(playerId: number) {
-    throw new Error('Method not implemented.');
+  async deleateOnePlayer(playerId: number) {
+    const project = await this.playersRepository.findOne(playerId);
+
+    if (!project) {
+      return;
+    }
+
+    this.playersRepository.delete(project);
   }
 }

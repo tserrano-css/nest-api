@@ -2,13 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNumber, IsString } from 'class-validator';
 
 export class CreatePlayerDto {
+  /*
   @ApiProperty({
     description: 'Identificador númerico del player',
     example: '12345',
   })
   @ApiProperty()
   @IsNumber()
-  playerId: number;
+  playerId: number;*/
 
   @ApiProperty()
   @IsString()
