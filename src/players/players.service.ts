@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { Player } from './entities/player.entity';
@@ -9,7 +11,7 @@ const mock: Player[] = [
     playerName: 'S. SIRIGU',
     pesMasterId: '32764',
     pesMasterName: 's-sirigu',
-    tranfermarktURL: null,
+    transfermarktURL: null,
     missing: false,
   },
   {
@@ -17,7 +19,7 @@ const mock: Player[] = [
     playerName: 'Y. SOMMER',
     pesMasterId: '36627',
     pesMasterName: 'y-sommer',
-    tranfermarktURL:
+    transfermarktURL:
       'https://www.transfermarkt.es/yann-sommer/profil/spieler/42205',
     missing: false,
   },
@@ -26,7 +28,7 @@ const mock: Player[] = [
     playerName: 'N. OTAMENDI',
     pesMasterId: '40725',
     pesMasterName: 'n-otamendi',
-    tranfermarktURL:
+    transfermarktURL:
       'https://www.transfermarkt.es/nicolas-otamendi/profil/spieler/54781',
     missing: false,
   },
@@ -34,12 +36,17 @@ const mock: Player[] = [
 
 @Injectable()
 export class PlayersService {
-  getManyPlayers(): Player[] {
-    return mock;
+  constructor(
+    @InjectRepository(Player)
+    private readonly playersRepository: Repository<Player>
+  ) {}
+
+  getManyPlayers(): Promise<Player[]> {
+    return this.playersRepository.find();
   }
 
-  getOnePlayer(playerId: number): Player {
-    throw new Error('Method not implemented.');
+  getOnePlayer(playerId: number): Promise<Player> {
+    return this.playersRepository.findOne(playerId);
   }
 
   createOnePlayer(playerDto: CreatePlayerDto): Player {

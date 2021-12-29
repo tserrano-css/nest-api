@@ -11,7 +11,7 @@ export class Player {
   @Column()
   pesMasterName: string;
   @Column()
-  tranfermarktURL: string;
+  transfermarktURL?: string;
   @Column()
   missing: boolean;
 }

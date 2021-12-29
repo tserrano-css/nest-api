@@ -9,7 +9,7 @@ import { TournamentsModule } from './tournaments/tournaments.module';
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mssql',
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
       username: process.env.DATABASE_USER,
@@ -17,6 +17,7 @@ import { TournamentsModule } from './tournaments/tournaments.module';
       database: process.env.DATABASE_NAME,
       synchronize: process.env.DATABASE_SYNC === 'true',
       autoLoadEntities: true,
+      options: { encrypt: false },
     }),
     PlayersModule,
     SeasonsModule,

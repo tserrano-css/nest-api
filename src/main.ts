@@ -18,6 +18,8 @@ async function bootstrap() {
     .setDescription('The work time system API description')
     .setVersion('1.0')
     .addTag('players')
+    .addTag('seasons')
+    .addTag('tournaments')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

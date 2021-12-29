@@ -23,13 +23,15 @@ export class PlayersController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getManyPlayers(): Player[] {
+  getManyPlayers(): Promise<Player[]> {
     return this.playersService.getManyPlayers();
   }
 
   @Get(':playerId')
   @HttpCode(HttpStatus.OK)
-  getOnePlayer(@Param('playerId', ParseIntPipe) playerId: number): Player {
+  getOnePlayer(
+    @Param('playerId', ParseIntPipe) playerId: number,
+  ): Promise<Player> {
     return this.playersService.getOnePlayer(playerId);
   }
 
