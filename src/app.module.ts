@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PlayersModule } from './players/players.module';
 import { SeasonsModule } from './seasons/seasons.module';
@@ -6,15 +7,16 @@ import { TournamentsModule } from './tournaments/tournaments.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5436,
-      username: 'user_pesg11',
-      password: 'password_pesg11',
-      database: 'db_pesg11',
+      host: process.env.DATABASE_HOST,
+      port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
+      synchronize: process.env.DATABASE_SYNC === 'true',
       autoLoadEntities: true,
-      synchronize: true,
     }),
     PlayersModule,
     SeasonsModule,
