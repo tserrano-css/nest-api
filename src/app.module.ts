@@ -1,13 +1,25 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import configuration from './config/configuration';
 import { PlayersModule } from './players/players.module';
 import { SeasonsModule } from './seasons/seasons.module';
 import { TournamentsModule } from './tournaments/tournaments.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      load: [configuration],
+      isGlobal: true,
+      envFilePath: ['.env'],
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) =>
+        configService.get('database'),
+    }),
+    /*
     TypeOrmModule.forRoot({
       type: 'mssql',
       host: process.env.DATABASE_HOST,
@@ -18,7 +30,7 @@ import { TournamentsModule } from './tournaments/tournaments.module';
       synchronize: process.env.DATABASE_SYNC === 'true',
       autoLoadEntities: true,
       options: { encrypt: false },
-    }),
+    }),*/
     PlayersModule,
     SeasonsModule,
     TournamentsModule,
