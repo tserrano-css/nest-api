@@ -5,6 +5,7 @@ import configuration from './config/configuration';
 import { PlayersModule } from './players/players.module';
 import { SeasonsModule } from './seasons/seasons.module';
 import { TournamentsModule } from './tournaments/tournaments.module';
+import { SeasonPlayersModule } from './season-players/season-players.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { TournamentsModule } from './tournaments/tournaments.module';
     PlayersModule,
     SeasonsModule,
     TournamentsModule,
+    SeasonPlayersModule,
   ],
   controllers: [],
   providers: [],

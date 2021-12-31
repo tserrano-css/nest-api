@@ -21,6 +21,7 @@ async function bootstrap() {
     .addTag('players')
     .addTag('seasons')
     .addTag('tournaments')
+    .addTag('season-players')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
