@@ -6,6 +6,7 @@ import { PlayersModule } from './players/players.module';
 import { SeasonsModule } from './seasons/seasons.module';
 import { TournamentsModule } from './tournaments/tournaments.module';
 import { SeasonPlayersModule } from './season-players/season-players.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { SeasonPlayersModule } from './season-players/season-players.module';
     SeasonsModule,
     TournamentsModule,
     SeasonPlayersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
