@@ -1,0 +1,14 @@
+{
+  "type": "mssql",
+  "host": "myhost",
+  "port": 1433,
+  "username": "myuser",
+  "password": "mypassword",
+  "database": "mydatabase",
+  "entities": ["dist/**/*.entity.js"],
+  "migrations": ["dist/migrations/*.js"],
+  "migrationsTableName": "migrations_typeorm",
+  "cli": {
+    "migrationsDir": "src/migrations"
+  }
+}
